@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
             id: newUser._id,
             username: newUser.username
          },
-         "maSuperCleSecreteQuiNeSeraPasTrouvéeParUnHacker",
+         process.env.JWT_SECRET,
          { expiresIn: '1h' }
       )
 
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
       // Si le mot de passe correspond, on créé le token et on le renvoi à l'utilisateur
       const token = jwt.sign(
          { id: user._id, username: user.username},
-         "maSuperCleSecreteQuiNeSeraPasTrouvéeParUnHacker",
+         process.env.JWT_SECRET,
          { expiresIn: "1h"}
       )
 

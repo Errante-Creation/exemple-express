@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const dbURI = "mongodb+srv://cours2025:pass1234@cluster0.8fmj9is.mongodb.net/cours2025?retryWrites=true&w=majority&appName=Cluster0" // Utilisez les infos fournies par MongoDB Atlas
+const dbURI = process.env.MONGO_URI // Utilisez les infos fournies par MongoDB Atlas
 
 mongoose.connect(dbURI)
    .then(() => console.log("Connexion à MongoDB réussie !"))
