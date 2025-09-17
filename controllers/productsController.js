@@ -40,40 +40,40 @@ exports.createNewProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
    try {
       const product = await Product.findById(req.params.id)
-      if(product == null){
-         res.status(404).json({message: "Produit non trouvé"})
+      if (product == null) {
+         res.status(404).json({ message: "Produit non trouvé" })
       }
 
-      if(req.body.name != null){
+      if (req.body.name != null) {
          product.name = req.body.name
       }
 
-      if(req.body.price != null){
+      if (req.body.price != null) {
          product.price = req.body.price
       }
 
-      if(req.body.stock != null){
+      if (req.body.stock != null) {
          product.stock = req.body.stock
       }
 
       const updateProduct = await product.save()
       res.json(updateProduct)
 
-   } catch (err){
-      res.status(400).json({message: err.message})
+   } catch (err) {
+      res.status(400).json({ message: err.message })
    }
 }
 
 exports.deleteProduct = async (req, res) => {
    try {
       const product = await Product.findById(req.params.id)
-      if(product == null){
-         res.status(404).json({ message: 'Produit non trouvé'})
+      if (product == null) {
+         res.status(404).json({ message: 'Produit non trouvé' })
       }
 
       await product.deleteOne()
-      res.json({message: "Produit supprimé"})
-   } catch (err){
-      res.status(500).json({ message: err.message})
+      res.json({ message: "Produit supprimé" })
+   } catch (err) {
+      res.status(500).json({ message: err.message })
    }
 }
