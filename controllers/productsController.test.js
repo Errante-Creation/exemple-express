@@ -1,5 +1,5 @@
 // Importer les fonctions du contrôleur à tester
-const { getAllProducts, getProductById, createNewProduct, updateProduct } = require('./productsController')
+const { getAllProducts, getProductById, createNewProduct, updateProduct, deleteProduct } = require('./productsController')
 // Importe le modèle Product
 const Product = require('../models/productsModel')
 
@@ -180,6 +180,47 @@ describe('Products Controller', () => {
          expect(res.status).toHaveBeenCalledWith(400)
          expect(res.json).toHaveBeenCalledWith({ message: 'Save error' })
 
+      })
+   }) // /describe updateById
+
+   describe('deleteProduct', () => {
+      it('should delete product', async () => {
+         // Mock de la fonction deleteOne() de Product pour retourner null
+         const mockProduct = {
+            _id: '1',
+            deleteOne: jest.fn().mockResolvedValue()
+         }
+         req.params.id = '1'
+         Product.findById.mockResolvedValue(mockProduct)
+
+         await deleteProduct(req, res)
+
+         expect(Product.findById).toHaveBeenCalledWith('1')
+         expect(mockProduct.deleteOne).toHaveBeenCalled()
+         expect(res.json).toHaveBeenCalledWith({ message: "Produit supprimé" })
+      })
+
+      it('should return 404 when product not found', async () => {
+         req.params.id = '1'
+         Product.findById.mockResolvedValue(null)
+
+         await deleteProduct(req, res)
+
+         expect(res.status).toHaveBeenCalledWith(404)
+         expect(res.json).toHaveBeenCalledWith({ message: 'Produit non trouvé' })
+      })
+
+      it('should handle delete errors', async () => {
+         const mockProduct = {
+            deleteOne: jest.fn().mockRejectedValue(new Error('Delete error'))
+         }
+         req.params.id = '1'
+         Product.findById.mockResolvedValue(mockProduct)
+
+         await deleteProduct(req, res)
+
+         expect(res.status).toHaveBeenCalledWith(500)
+         expect(res.json).toHaveBeenCalledWith({ message: 'Delete error' })
       })
    })
 
